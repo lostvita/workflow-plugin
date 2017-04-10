@@ -11,6 +11,7 @@
 
   2.在scss中（实际是在css中）：复写webp图片的引用类，使得样式表中优先加载webp格式图片
 
+**要求在引入样式表的html模板中的跟跟节点（html）上添加'webps'的类**
 **该插件目前仅支持png和jpg格式图片的webp化**
 
 #### Install
