@@ -30,7 +30,7 @@ postprocessor: [
 ]
 
 // html中使用
-<img src="/static/img/yhjy/test37head/btn-sign.png?__webp" alt="">
+<img src="/static/img/yhjy/btn-sign.png?__webp" alt="">
 
 // scss中使用
 background: url($imgURL + "btn-sign.png?__webp") no-repeat top center;
