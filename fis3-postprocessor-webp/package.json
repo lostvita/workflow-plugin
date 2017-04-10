@@ -1,0 +1,25 @@
+{
+  "name": "fis3-parser-webp",
+  "version": "1.0.0",
+  "description": "\"fis3处理html/scss图片webp化插件\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qiudongwei/node_module.git"
+  },
+  "keywords": [
+    "fis3-webp"
+  ],
+  "author": "寒影",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qiudongwei/node_module/issues"
+  },
+  "homepage": "https://github.com/qiudongwei/node_module#readme",
+  "dependencies": {
+    "cheerio": "^0.22.0"
+  }
+}
