@@ -7,7 +7,7 @@
 - 识别出文件中带?__webp后缀的图片链接并将其转化成webp格式图片
 - 兼容代码的处理：
 
-  1.在html中：一是在head标签内插入webp的script兼容检测脚本，二是替换img为picture标签
+  1.在html中：替换img为picture标签
 
   2.在scss中（实际是在css中）：复写webp图片的引用类，使得样式表中优先加载webp格式图片
 
