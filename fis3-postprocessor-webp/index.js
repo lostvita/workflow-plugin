@@ -14,6 +14,10 @@ const utils = {
 		return this.state.regxHtml.test(str);
 	},
 
+	isScss: function(str){
+		return this.state.regxScss.test(str);
+	},
+
 	isWebp: function(str){
 		return this.state.regxWebp.test(str);
 	},
@@ -93,22 +97,123 @@ const parseHtml = function(content, file, settings){
         	let alt = img.prop('alt') || '',
                 title = img.prop('title') || '',
                 name = src.split('?__webp')[0],
-                html = "<picture><source srcset=\"" + name + ".webp\" src=\"" + name + ".webp\" type=\"image/webp\"><img srcset=\"" + src + "\" src=\"" + src + "\" alt=\"" + alt + "\" title=\"" + title + "\"></picture>"
+                html = "<picture><source srcset=\"" + name + ".webp\" type=\"image/webp\"><img srcset=\"" + name + "\" src=\"" + name + "\" alt=\"" + alt + "\" title=\"" + title + "\"></picture>"
             img.after(html);
             img.remove();
         }
     }
-    isRewrite && (ctn = $.html());
+    if(isRewrite){
+    	let headEl = $('head'),
+    		webpScript = `<script>;(function(doc) {
+                // 给html根节点加上webps类名
+                function addRootTag() {
+                    doc.documentElement.className += " webps";
+                }
+                // 判断是否有webps=A这个cookie
+                if (!/(^|;\s?)webps=A/.test(document.cookie)) {
+                    var image = new Image();
+                    // 图片加载完成时候的操作
+                    image.onload = function() {
+                        // 图片加载成功且宽度为1，那么就代表支持webp了，因为这张base64图是webp格式。如果不支持会触发image.error方法
+                        if (image.width == 1) {
+                            // html根节点添加class，并且埋入cookie
+                            addRootTag();
+                            document.cookie = "webps=A; max-age=31536000; domain=gm99.com";
+                        }
+                    };
+                    // 一张支持alpha透明度的webp的图片，使用base64编码
+                    image.src = 'data:image/webp;base64,UklGRkoAAABXRUJQVlA4WAoAAAAQAAAAAAAAAAAAQUxQSAwAAAARBxAR/Q9ERP8DAABWUDggGAAAABQBAJ0BKgEAAQAAAP4AAA3AAP7mtQAAAA==';
+                } else {
+                    addRootTag();
+                }
+            }(document));</script>`;
+    	headEl.append(webpScript);
+    	ctn = $.html();
+    }
+    return ctn;
+}
+
+const parseCss = function(content, file, settings){
+	let html = '',
+        ctn = content.toString("utf8");  // buffer转utf8;
+
+    // 已经注入过webps类，先要剔除
+    let rmStart = ctn.indexOf('.webps'),
+    	isRemove = rmStart != '-1' && ctn.indexOf('.webp') != -1;  // 后一个判断表示图片后缀
+    if(isRemove){
+        ctn = ctn.slice(0,rmStart);
+    }
+
+    ctn.replace(/url\([\'\"](\S+)[\'\"]\)/gi,function(str,src,index){
+        src = src.split(')')[0];
+        let _root = file.dirname.split('/static')[0],
+        	name = src.slice(0,src.lastIndexOf('?')),
+            start = ctn.lastIndexOf('{',index),
+            end = ctn.indexOf('}',start) + 1,
+            styleCtn = ctn.slice(start,end),
+            // 获取类名
+            clssEnd = start,
+            cs1 = ctn.lastIndexOf('}',clssEnd),
+            cs2 = ctn.lastIndexOf(',',clssEnd),
+
+            // 区分多个类名之间以','连接的情况
+            clssStart = cs1 < cs2 ? (cs1+1) : ctn.lastIndexOf('.',clssEnd),
+            clsses = ctn.slice(clssStart,clssEnd).split(','),             
+
+            // 获取bg背景属性
+            proEnd = ctn.lastIndexOf(':',index),
+            case1 = ctn.lastIndexOf(';',index),
+            case2 = ctn.lastIndexOf('{',index), // bg属性作为类中的第一个属性
+            proStart = case1 < case2 ? case2+1 : case1+1,
+            pro = ctn.slice(proStart,proEnd);
+
+        // 生成webp图片
+        let fullsrc = utils.isWebp(src) ? (_root + src.split('?__webp')[0]) : null;
+        utils.webper(settings,fullsrc,dest);
+
+        let clss = '';
+        for(let i=0,l=clsses.length; i<l; i++){
+            clss += '.webps ' + clsses[i] + ','
+        }
+        clss = clss.slice(0,clss.length-1); // 提出最后一个类中的符号','
+
+        // background的属性值（除去url）
+        let bgVal = '';
+        if(pro === 'background'){
+            let bgValStart = styleCtn.indexOf(')')+2,
+                bgValEnd = styleCtn.indexOf(';',bgValStart);
+            bgValEnd = bgValEnd !== -1 ? bgValEnd : styleCtn.length-1;
+
+            bgVal = styleCtn.slice(bgValStart,bgValEnd); // repeat top ...
+        }
+
+        // 获取bg-size属性
+        let bsStart = styleCtn.indexOf('background-size:') + 16,
+            bgSize = '';
+
+        if(bsStart !== 15) {
+            let bsEnd = styleCtn.indexOf(';',bsStart);
+            bsEnd = bsEnd === -1 ? styleCtn.indexOf('}') : bsEnd;
+            bgSize = styleCtn.slice(bsStart,bsEnd);
+        }
+
+        html += clss + "{" + pro + ":url(" + name + ".webp)";
+        bgVal && (html += " "+bgVal);
+        html += " !important;";
+        bgSize && (html += "background-size:"+bgSize+" !important;");
+        html += "}";
+    });
+    ctn += html;
+
     return ctn;
 }
 
 module.exports = function (content, file, settings) {
-	console.log(file)
 	let ctn = content;
 	if(utils.isHtml(file.rExt)){
 		ctn = parseHtml(content, file, settings);
 	}else if(utils.isScss(file.rExt)){
-		console.log('scss...')
+		ctn = parseCss(content, file, settings);
 	}
 	return ctn;
 }
