@@ -82,7 +82,7 @@ const parseHtml = function(content, file, settings){
     let ctn = content,
         $ = cheerio.load(ctn),
         imgs = $('img'),
-        len = imgs.length,
+        len = imgs.length;
         isRewrite = false;
 
     for(let i=0; i<len; i++){
@@ -102,34 +102,7 @@ const parseHtml = function(content, file, settings){
             img.remove();
         }
     }
-    if(isRewrite){
-        let headEl = $('head'),
-            webpScript = `<script>;(function(doc) {
-                // 给html根节点加上webps类名
-                function addRootTag() {
-                    doc.documentElement.className += " webps";
-                }
-                // 判断是否有webps=A这个cookie
-                if (!/(^|;\s?)webps=A/.test(document.cookie)) {
-                    var image = new Image();
-                    // 图片加载完成时候的操作
-                    image.onload = function() {
-                        // 图片加载成功且宽度为1，那么就代表支持webp了，因为这张base64图是webp格式。如果不支持会触发image.error方法
-                        if (image.width == 1) {
-                            // html根节点添加class，并且埋入cookie
-                            addRootTag();
-                            document.cookie = "webps=A; max-age=31536000; domain=gm99.com";
-                        }
-                    };
-                    // 一张支持alpha透明度的webp的图片，使用base64编码
-                    image.src = 'data:image/webp;base64,UklGRkoAAABXRUJQVlA4WAoAAAAQAAAAAAAAAAAAQUxQSAwAAAARBxAR/Q9ERP8DAABWUDggGAAAABQBAJ0BKgEAAQAAAP4AAA3AAP7mtQAAAA==';
-                } else {
-                    addRootTag();
-                }
-            }(document));</script>`;
-        headEl.append(webpScript);
-        ctn = $.html();
-    }
+    isRewrite && (ctn = $.html());
     return ctn;
 }
 
@@ -167,44 +140,47 @@ const parseCss = function(content, file, settings){
             proStart = case1 < case2 ? case2+1 : case1+1,
             pro = ctn.slice(proStart,proEnd);
 
-        // 生成webp图片
+        // 判断是否有webp标识
         let fullsrc = utils.isWebp(src) ? (_root + src.split('?__webp')[0]) : null;
         if(fullsrc){
             let dest = fullsrc + ".webp";
+
+            // 生成webp图片
             utils.webper(settings,fullsrc,dest);
+
+            let clss = '';
+            for(let i=0,l=clsses.length; i<l; i++){
+                clss += '.webps ' + clsses[i] + ','
+            }
+            clss = clss.slice(0,clss.length-1); // 提出最后一个类中的符号','
+
+            // background的属性值（除去url）
+            let bgVal = '';
+            if(pro === 'background'){
+                let bgValStart = styleCtn.indexOf(')')+2,
+                    bgValEnd = styleCtn.indexOf(';',bgValStart);
+                bgValEnd = bgValEnd !== -1 ? bgValEnd : styleCtn.length-1;
+
+                bgVal = styleCtn.slice(bgValStart,bgValEnd); // repeat top ...
+            }
+
+            // 获取bg-size属性
+            let bsStart = styleCtn.indexOf('background-size:') + 16,
+                bgSize = '';
+
+            if(bsStart !== 15) {
+                let bsEnd = styleCtn.indexOf(';',bsStart);
+                bsEnd = bsEnd === -1 ? styleCtn.indexOf('}') : bsEnd;
+                bgSize = styleCtn.slice(bsStart,bsEnd);
+            }
+
+            html += clss + "{" + pro + ":url(" + name + ".webp)";
+            bgVal && (html += " "+bgVal);
+            html += " !important;";
+            bgSize && (html += "background-size:"+bgSize+" !important;");
+            html += "}";
         }
 
-        let clss = '';
-        for(let i=0,l=clsses.length; i<l; i++){
-            clss += '.webps ' + clsses[i] + ','
-        }
-        clss = clss.slice(0,clss.length-1); // 提出最后一个类中的符号','
-
-        // background的属性值（除去url）
-        let bgVal = '';
-        if(pro === 'background'){
-            let bgValStart = styleCtn.indexOf(')')+2,
-                bgValEnd = styleCtn.indexOf(';',bgValStart);
-            bgValEnd = bgValEnd !== -1 ? bgValEnd : styleCtn.length-1;
-
-            bgVal = styleCtn.slice(bgValStart,bgValEnd); // repeat top ...
-        }
-
-        // 获取bg-size属性
-        let bsStart = styleCtn.indexOf('background-size:') + 16,
-            bgSize = '';
-
-        if(bsStart !== 15) {
-            let bsEnd = styleCtn.indexOf(';',bsStart);
-            bsEnd = bsEnd === -1 ? styleCtn.indexOf('}') : bsEnd;
-            bgSize = styleCtn.slice(bsStart,bsEnd);
-        }
-
-        html += clss + "{" + pro + ":url(" + name + ".webp)";
-        bgVal && (html += " "+bgVal);
-        html += " !important;";
-        bgSize && (html += "background-size:"+bgSize+" !important;");
-        html += "}";
     });
     ctn += html;
 
