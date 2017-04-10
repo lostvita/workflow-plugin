@@ -1,6 +1,6 @@
 {
   "name": "fis3-parser-webp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "\"fis3处理html/scss图片webp化插件\"",
   "main": "index.js",
   "scripts": {
