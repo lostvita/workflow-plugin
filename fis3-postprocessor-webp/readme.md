@@ -1,6 +1,6 @@
 #### fis3-postprocessor-webp
 
-标准化后处fis3理插件（postprocessor阶段），可以针对html和scss文件中带<font class="red">?__webp</font>后缀的图片webp化.
+> 标准化后处fis3理插件（postprocessor阶段），可以针对html和scss文件中带<font color="red">?__webp</font>后缀的图片webp化.
 
 该插件完成的工作主要有两点：
 
