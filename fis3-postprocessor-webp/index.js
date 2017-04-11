@@ -172,7 +172,7 @@ const parseCss = function(content, file, settings){
             case1 = ctn.lastIndexOf(';',index),
             case2 = ctn.lastIndexOf('{',index), // bg属性作为类中的第一个属性
             proStart = case1 < case2 ? case2+1 : case1+1,
-            pro = ctn.slice(proStart,proEnd);
+            pro = ctn.slice(proStart,proEnd).trim();
 
         let fullsrc = _root + src;
         let dest = fullsrc + ".webp";
@@ -191,8 +191,7 @@ const parseCss = function(content, file, settings){
         if(pro === 'background'){
             let bgValStart = styleCtn.indexOf(')')+2,
                 bgValEnd = styleCtn.indexOf(';',bgValStart);
-            bgValEnd = bgValEnd !== -1 ? bgValEnd : styleCtn.length-1;
-
+            bgValEnd = bgValEnd != -1 ? bgValEnd : styleCtn.length-1;
             bgVal = styleCtn.slice(bgValStart,bgValEnd); // repeat top ...
         }
 
