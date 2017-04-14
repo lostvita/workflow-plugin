@@ -21,5 +21,8 @@
   "homepage": "https://github.com/qiudongwei/node_module#readme",
   "dependencies": {
     "cheerio": "^0.22.0"
+  },
+  "devDependencies": {
+    "he": "^1.1.1"
   }
 }

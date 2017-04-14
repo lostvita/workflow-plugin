@@ -1,7 +1,8 @@
-let fs          = require('fs');
+let fs          = require('fs'),
+    exec        = require('child_process').exec;
 
 let cheerio     = require('cheerio'),
-    exec        = require('child_process').exec;
+    he          = require('he');
 
 const utils = {
     state:{
@@ -129,6 +130,9 @@ const parseHtml = function(content, file, settings){
                             removeRootTag();
                         }
                     };
+                    image.onerror = function(){
+                        removeRootTag();
+                    }
                     // 一张支持alpha透明度的webp的图片，使用base64编码
                     image.src = 'data:image/webp;base64,UklGRkoAAABXRUJQVlA4WAoAAAAQAAAAAAAAAAAAQUxQSAwAAAARBxAR/Q9ERP8DAABWUDggGAAAABQBAJ0BKgEAAQAAAP4AAA3AAP7mtQAAAA==';
                 } else {
@@ -136,8 +140,8 @@ const parseHtml = function(content, file, settings){
                 }
             }(document));</script>`;
     headEl.append(webpScript);
-    // isRewrite && (ctn = $.html());
-    ctn = $.html();
+
+    ctn = he.decode($.html());
     return ctn;
 }
 
