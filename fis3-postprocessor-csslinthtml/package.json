@@ -1,6 +1,6 @@
 {
   "name": "fis3-postprocessor-csslinthtml",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "基于css3校验html代码的fis3插件",
   "main": "index.js",
   "scripts": {

@@ -7,7 +7,8 @@ const utils = {
         lintMap:{
         	"errors": "//events.gm99.com/static/scss/common/csslint/errors.css",
         	"warns": "//events.gm99.com/static/scss/common/csslint/warns.css",
-        	"advices": "//events.gm99.com/static/scss/common/csslint/advices.css"
+            "advices": "//events.gm99.com/static/scss/common/csslint/advices.css"
+        	"obsoletes": "//events.gm99.com/static/scss/common/csslint/obsoletes.css"
         }
     },
 
