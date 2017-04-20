@@ -21,7 +21,7 @@ fis.match('/html/**/*.html', {
     postprocessor:[fis.plugin('csslinthtml',{
         useCssLint: true,
         type:["errors"], // 类型：errors、warns、advices
-        lint:["www.example.com/static/css/csslint/errors.css"] // css检测规则样式表
+        lint:["//www.example.com/static/css/csslint/errors.css"] // css检测规则样式表
       })
     ]
 });
@@ -31,7 +31,7 @@ fis.match('/html/**/*.html', {
 - type：设置检测的类型，目前支持errors、warns和advices
 - lint：css检测样式表，插件默认为该三种检测类型映射了检测样式表，用户可以不再设置。如果用户想要使用自己的检测规则，则在这里填写样式表的超链接。
 
-> 注意：type跟lint的位置要互相匹配
+> 注意：type跟lint的位置要互相对应
 
 ### Role
 
