@@ -1,0 +1,26 @@
+{
+  "name": "fis3-command-copy",
+  "version": "1.0.0",
+  "description": "37海外前端fis3自动化工作流文件目录复制插件",
+  "main": "index.js",
+  "scripts": {
+    "test": "fis3 copy --conf './yourCopyCong.json'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qiudongwei/node_module.git"
+  },
+  "keywords": [
+    "fis3",
+    "copy"
+  ],
+  "author": "寒影",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qiudongwei/node_module/issues"
+  },
+  "homepage": "https://github.com/qiudongwei/node_module#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+}
