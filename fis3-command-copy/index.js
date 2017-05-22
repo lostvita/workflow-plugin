@@ -94,7 +94,7 @@ const Util = {
         dirs.map((dir) => {
             let rSrc = this._root + "static/" + dir + '/' + opts.gameId + '/' + opts.eventId,
                 target = aimPath + 'static/' + dir + '/' + opts.gameId + '/' + opts.eventId;
-            console.log("【COPY】" + rSrc + " --> " + target);
+            console.log("【COPY】" + rSrc + " >> " + target);
             gulp.src(rSrc + '/**/*')
                 .pipe(gulp.dest(target));
         });
@@ -121,7 +121,7 @@ const Util = {
         if(dir){
             target = aimPath + dir;
         }
-        console.log("【COPY】" + rSrc + " --> " + target);
+        console.log("【COPY】" + rSrc + " >> " + target);
         gulp.src(rSrc)
             .pipe(gulp.dest(target));
     },
@@ -149,7 +149,7 @@ const Util = {
                                     target = aimPath + dir;
                                 gulp.src(rSrc)
                                     .pipe(gulp.dest(target));
-                                console.log("【COPY】" + rSrc + " --> " + target);
+                                console.log("【COPY】" + rSrc + " >> " + target);
                             })
                         }
                     });
@@ -161,7 +161,7 @@ const Util = {
         let src = [this._root + '{,*}.*'];
         gulp.src(src)
             .pipe(gulp.dest(aimPath));
-        console.log("【COPY】" + src + " --> " + aimPath);
+        console.log("【COPY】" + src + " >> " + aimPath);
     },
 
     /**
@@ -186,7 +186,7 @@ const Util = {
                     target = aimPath + handDir;
                 gulp.src(rSrc)
                     .pipe(gulp.dest(target));
-                console.log("【COPY】" + rSrc + " --> " + target);
+                console.log("【COPY】" + rSrc + " >> " + target);
             });
         })
     }
