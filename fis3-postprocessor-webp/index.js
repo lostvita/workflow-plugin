@@ -193,8 +193,9 @@ const parseCss = function(content, file, settings){
         // background的属性值（除去url）
         let bgVal = '';
         if(pro === 'background'){
-            let bgValStart = styleCtn.indexOf(')')+2,
-                bgValEnd = styleCtn.indexOf(';',bgValStart);
+            let _start = styleCtn.indexOf(')'),
+                bgValStart = _start+2,
+                bgValEnd = styleCtn.indexOf(';',_start);
             bgValEnd = bgValEnd != -1 ? bgValEnd : styleCtn.length-1;
             bgVal = styleCtn.slice(bgValStart,bgValEnd); // repeat top ...
         }
