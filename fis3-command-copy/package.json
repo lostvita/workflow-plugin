@@ -1,6 +1,6 @@
 {
   "name": "fis3-command-copy",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "37海外前端fis3自动化工作流文件目录复制插件",
   "main": "index.js",
   "scripts": {

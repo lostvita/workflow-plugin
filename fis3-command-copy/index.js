@@ -92,9 +92,10 @@ const Util = {
 
         let dirs = ['html', 'img', 'js', 'scss'];
         dirs.map((dir) => {
-            let rSrc = this._root + "static/" + dir + '/' + opts.gameId + '/' + opts.eventId,
-                target = aimPath + 'static/' + dir + '/' + opts.gameId + '/' + opts.eventId;
-            console.log("【COPY】" + rSrc + " >> " + target);
+            let common = 'static/' + dir + '/' + opts.gameId + '/' + opts.eventId;
+            let rSrc = this._root + common,
+                target = aimPath + common;
+            fis.log.info("[COPY] " + common + " >> " + target);
             gulp.src(rSrc + '/**/*')
                 .pipe(gulp.dest(target));
         });
@@ -121,7 +122,7 @@ const Util = {
         if(dir){
             target = aimPath + dir;
         }
-        console.log("【COPY】" + rSrc + " >> " + target);
+        fis.log.info("[COPY] " + file + " >> " + target);
         gulp.src(rSrc)
             .pipe(gulp.dest(target));
     },
@@ -149,7 +150,7 @@ const Util = {
                                     target = aimPath + dir;
                                 gulp.src(rSrc)
                                     .pipe(gulp.dest(target));
-                                console.log("【COPY】" + rSrc + " >> " + target);
+                                fis.log.info("[COPY] " + dir + " >> " + target);
                             })
                         }
                     });
@@ -161,7 +162,7 @@ const Util = {
         let src = [this._root + '{,*}.*'];
         gulp.src(src)
             .pipe(gulp.dest(aimPath));
-        console.log("【COPY】" + src + " >> " + aimPath);
+        fis.log.info("[COPY] " + src + " >> " + aimPath);
     },
 
     /**
@@ -186,7 +187,7 @@ const Util = {
                     target = aimPath + handDir;
                 gulp.src(rSrc)
                     .pipe(gulp.dest(target));
-                console.log("【COPY】" + rSrc + " >> " + target);
+                fis.log.info("[COPY] " + handDir + " >> " + target);
             });
         })
     }
@@ -212,7 +213,7 @@ exports.run = function(argv, cli) {
         config = require(confPath);
     }catch(err){
         let errMsg = "配置文件：" + confPath + "不存在！";
-        console.log("【错误】" + errMsg);
+        fis.log.error("【错误】" + errMsg);
         throw new Error(err);
     }
 
