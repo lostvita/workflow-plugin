@@ -1,0 +1,21 @@
+{
+  "name": "gulp-imgs2base64",
+  "version": "1.0.0",
+  "description": "图片base64插件",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gulp",
+    "base64"
+  ],
+  "author": "寒影",
+  "license": "ISC",
+  "devDependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "gulp-util": "^3.0.8",
+    "he": "^1.1.1",
+    "through2": "^2.0.3"
+  }
+}
