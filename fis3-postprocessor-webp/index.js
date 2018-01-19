@@ -97,8 +97,9 @@ const parseHtml = function(content, file, settings){
 
             let alt = img.prop('alt') || '',
                 title = img.prop('title') || '',
+                cls = img.prop('class') || '',
                 name = src.split('?__webp')[0],
-                html = "<picture><source srcset=\"" + name + ".webp\" type=\"image/webp\"><img srcset=\"" + name + "\" src=\"" + name + "\" alt=\"" + alt + "\" title=\"" + title + "\"></picture>"
+                html = "<picture class=\"" + cls + "\"><source srcset=\"" + name + ".webp\" type=\"image/webp\"><img srcset=\"" + name + "\" src=\"" + name + "\" alt=\"" + alt + "\" title=\"" + title + "\"></picture>"
             img.after(html);
             img.remove();
         }
